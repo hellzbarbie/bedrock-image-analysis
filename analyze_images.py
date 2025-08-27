@@ -12,8 +12,8 @@ load_dotenv()
 
 # Instantiating the Bedrock client, and passing in the CLI profile
 boto3.setup_default_session(profile_name=os.getenv("profile_name"))
-bedrock = boto3.client('bedrock-runtime', 'us-west-2', endpoint_url='https://bedrock-runtime-us-west-2.amazonaws.com')
-
+bedrock = boto3.client('bedrock-runtime', 'us-east-1', endpoint_url='https://bedrock-runtime-us-east-1.amazonaws.com')
+model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
 
 def image_base64_encoder(image_name):
     """
@@ -52,6 +52,11 @@ def analyze_image(image_name, text) -> str:
     system_prompt = """Describe every detail you can about this image, be extremely thorough and detail even the most minute aspects of the image.
     If a more specific question is presented by the user, make sure to prioritize that answer.
     """
+
+    # Modified system_prompt tailored to specific use cases:
+    # system_prompt = """You are an expert in image analysis and classification.
+    # The question will be contained within the <question></question> tags...
+    # """
     # Checking if the user inserted and text along with the image. If not, we set text to a default since Claude3 expects
     # text in the text block of the prompt.
     if text == "":
